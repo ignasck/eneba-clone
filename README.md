@@ -84,5 +84,14 @@ This project was developed as a technical internship assignment. It meets the fo
 *   **Stack**: React frontend with a Node.js/SQLite backend.
 *   **Design**: Matches the provided visual layout with responsive and interactive elements.
 
+
+## 🔮 Future Improvements
+
+If I had more time to work on this project, I would focus on the following:
+
+- **Testing:** Implement Unit and Integration tests using **Vitest** (for Frontend) and **Jest/Supertest** (for Backend) to ensure reliability.
+- **Optimization:** Add image optimization and lazy loading for better performance.
+- **Security:** Implement rate limiting and input validation on the backend API.
+
 ---
 Developed by **Ignas** 🚀
