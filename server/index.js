@@ -3,10 +3,14 @@ const cors = require('cors');
 const db = require('./db');
 const Fuse = require('fuse.js');
 const app = express();
+const path = require('path');
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the React client build
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Main list and search endpoint
 app.get('/list', (req, res) => {
@@ -19,12 +23,12 @@ app.get('/list', (req, res) => {
             return;
         }
         const fuse = new Fuse(allGames, {
-          keys: ['title', 'platform', 'region'],  
-          threshold: 0.3,
+            keys: ['title', 'platform', 'region'],
+            threshold: 0.3,
 
         })
         const results = fuse.search(search);
-       res.json(results.map(r => r.item));
+        res.json(results.map(r => r.item));
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Database error' });
@@ -93,6 +97,11 @@ app.post('/wishlist/toggle', (req, res) => {
     }
 });
 
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
