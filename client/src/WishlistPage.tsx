@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Gamepad2, Heart, Undo2, MapPin, Bell, Search, ArrowUpDown } from 'lucide-react';
+import Fuse from 'fuse.js';
 
 interface Game {
     id: number;
@@ -28,10 +29,15 @@ export const WishlistPage = ({ games, wishlistSet, toggleWishlist, addToCart, fo
     // Filter games that are in wishlist
     const wishlistedGames = games.filter(g => wishlistSet.has(g.id));
 
-    // Filter by local search
-    const displayedGames = wishlistedGames.filter(g =>
-        g.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Fuzzy search setup
+    const fuse = new Fuse(wishlistedGames, {
+        keys: ['title', 'platform'],
+        threshold: 0.3,
+    });
+
+    const displayedGames = searchTerm
+        ? fuse.search(searchTerm).map(result => result.item)
+        : wishlistedGames;
 
     return (
         <div className="wishlist-page">
