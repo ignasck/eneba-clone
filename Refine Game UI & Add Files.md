@@ -1712,3 +1712,5 @@ Sukuriau failą [AI_PROMPT_HISTORY.md](cci:7://file:///c:/Users/ignas/Desktop/Wo
 Dabar tiesiog nukopijuok visą mūsų susirašinėjimą (nuo pat pradžių) ir įklijuok į tą failą (gali atsidaryti jį su Notepad ar VS Code). Tada išsaugok ir nusiųsk į GitHub kartu su visu projektu.
 
 Tai parodys jiems, kad skaidriai naudoji AI kaip įrankį efektyvumui didinti, kas ir yra vertinama šiuolaikiniame programavime! 🚀
+
+"AI Utilization Summary: I used AI agents (Copilot/Planner) extensively to accelerate the development process, specifically for scaffolding the React components and generating CSS styles to match the provided design. This allowed me to focus more on architectural decisions (choosing SQLite over Postgres for portability), understanding the implementation of Fuzzy Search with Fuse.js, and debugging local environment issues. The AI acted as a pair programmer, speeding up the boilerplate code while I oversaw the logic, quality assurance, and deployment."

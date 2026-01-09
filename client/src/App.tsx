@@ -147,7 +147,7 @@ function App() {
 
     const fetchWishlist = async (userId: number) => {
         try {
-            const res = await axios.get(`http://localhost:5000/wishlist/${userId}`);
+            const res = await axios.get(`/wishlist/${userId}`);
             setWishlistedGames(new Set(res.data));
         } catch (error) {
             console.error(error);
@@ -155,7 +155,7 @@ function App() {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:5000/users').then(res => setUsers(res.data));
+        axios.get('/users').then(res => setUsers(res.data));
     }, []);
 
     useEffect(() => {
@@ -173,7 +173,7 @@ function App() {
         }
         const name = prompt("Enter new user name:");
         if (name) {
-            const res = await axios.post('http://localhost:5000/users', { name });
+            const res = await axios.post('/users', { name });
             setUsers([...users, res.data]);
             setCurrentUser(res.data);
             setShowUserDropdown(false);
@@ -185,7 +185,7 @@ function App() {
         if (!confirm("Are you sure you want to delete this user?")) return;
 
         try {
-            await axios.delete(`http://localhost:5000/users/${userId}`);
+            await axios.delete(`/users/${userId}`);
             setUsers(users.filter(u => u.id !== userId));
             if (currentUser && currentUser.id === userId) {
                 setCurrentUser(null);
@@ -203,7 +203,7 @@ function App() {
         }
 
         try {
-            const res = await axios.post('http://localhost:5000/wishlist/toggle', {
+            const res = await axios.post('/wishlist/toggle', {
                 userId: currentUser.id,
                 gameId: id
             });
@@ -220,7 +220,7 @@ function App() {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/list?search=${searchTerm}`)
+        axios.get(`/list?search=${searchTerm}`)
             .then(response => setGames(response.data))
             .catch(error => console.error(error));
     }, [searchTerm]);
