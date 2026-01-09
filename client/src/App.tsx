@@ -8,6 +8,13 @@ import cartIcon from './assets/cart.svg';
 import wishlistIcon from './assets/wishlist.svg';
 import { WishlistPage } from './WishlistPage';
 
+// Jei esame localhost, naudojame port 5000, jei ne - naudojame santykinį kelią
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : '';
+
+axios.defaults.baseURL = API_BASE;
+
 const translations = {
     lt: {
         searchPlaceholder: "Ieškoti žaidimų...",
@@ -120,6 +127,14 @@ function App() {
     const [tempLang, setTempLang] = useState(language);
     const [tempCurr, setTempCurr] = useState(currency);
 
+    // Notification State
+    const [notification, setNotification] = useState<{ message: string, type: 'error' | 'success' } | null>(null);
+
+    const showNotification = (message: string, type: 'error' | 'success') => {
+        setNotification({ message, type });
+        setTimeout(() => setNotification(null), 3000);
+    };
+
     const t = translations[language];
     const curr = currencies[currency];
 
@@ -168,7 +183,7 @@ function App() {
 
     const handleCreateUser = async () => {
         if (users.length >= 5) {
-            alert("Maximum 5 users allowed!");
+            showNotification("Maximum 5 users allowed!", 'error');
             return;
         }
         const name = prompt("Enter new user name:");
@@ -177,6 +192,7 @@ function App() {
             setUsers([...users, res.data]);
             setCurrentUser(res.data);
             setShowUserDropdown(false);
+            showNotification(`User ${name} created!`, 'success');
         }
     };
 
@@ -197,8 +213,8 @@ function App() {
 
     const toggleWishlist = async (id: number) => {
         if (!currentUser) {
-            alert("Please select or create a user first!");
-            setShowUserDropdown(true);
+            showNotification("Please select a user to add items to wishlist!", 'error');
+            setShowUserDropdown(true); // Auto-open dropdown
             return;
         }
 
@@ -250,38 +266,42 @@ function App() {
                         alt="Flag"
                         className="flag-icon"
                     />
-                    <span>{language === 'lt' ? 'Lietuvių' : 'English'} | {currency}</span>
+                    <span>{language === 'lt' ? "Lietuvių" : "English"} | {currency}</span>
                 </button>
-                <div className="user-controls">
+
+                <div className="header-actions">
                     <div className="user-dropdown-container">
                         <button className="user-avatar" onClick={() => setShowUserDropdown(!showUserDropdown)}>
-                            {currentUser ? currentUser.name[0].toUpperCase() : '?'}
+                            {currentUser ? currentUser.name[0].toUpperCase() : "?"}
                         </button>
 
                         {showUserDropdown && (
                             <div className="user-dropdown">
                                 {users.map(u => (
-                                    <div key={u.id} className="dropdown-item user-item" onClick={() => { setCurrentUser(u); setShowUserDropdown(false); }}>
-                                        <span>{u.name}</span>
-                                        <span className="delete-user-btn" onClick={(e) => handleDeleteUser(e, u.id)}>×</span>
+                                    <div key={u.id} className="dropdown-item user-item" onClick={() => {
+                                        setCurrentUser(u);
+                                        setShowUserDropdown(false);
+                                    }}>
+                                        <span>{u.name} {currentUser?.id === u.id && "✓"}</span>
+                                        <button className="delete-user-btn" onClick={(e) => handleDeleteUser(e, u.id)}>×</button>
                                     </div>
                                 ))}
-                                {users.length < 5 && (
-                                    <div className="dropdown-item add-user" onClick={handleCreateUser}>
-                                        + Add User
-                                    </div>
-                                )}
+                                <div className="dropdown-item add-user" onClick={handleCreateUser}>
+                                    {t.addUser}
+                                </div>
                             </div>
                         )}
                     </div>
 
                     <button className="icon-button" onClick={() => navigate('/wishlist')}>
                         <img src={wishlistIcon} alt="Wishlist" />
+                        {wishlistedGames.size > 0 && <span className="cart-badge">{wishlistedGames.size}</span>}
                     </button>
-                    <div className="cart-container-wrapper" style={{ position: 'relative' }}>
+
+                    <div style={{ position: 'relative' }}>
                         <button className="icon-button" onClick={() => setIsCartOpen(!isCartOpen)}>
                             <img src={cartIcon} alt="Cart" />
-                            {cart.length > 0 && <span className="cart-badge">{cart.reduce((a, c) => a + c.quantity, 0)}</span>}
+                            {cart.length > 0 && <span className="cart-badge">{cart.reduce((a, b) => a + b.quantity, 0)}</span>}
                         </button>
 
                         {isCartOpen && (
@@ -294,7 +314,7 @@ function App() {
                                     </div>
 
                                     {cart.length === 0 ? (
-                                        <div className="empty-cart">
+                                        <div className="empty-cart-state">
                                             <div className="info-circle">
                                                 <Info size={32} />
                                             </div>
@@ -427,6 +447,8 @@ function App() {
                                                 </div>
                                             </div>
 
+                                        </div>
+                                        <div className="add-to-cart-wrapper">
                                             <button className="add-to-cart-btn" onClick={() => addToCart(game)}>
                                                 {t.addToCart}
                                             </button>
@@ -450,6 +472,15 @@ function App() {
                     } />
                 </Routes>
             </main>
+
+            {notification && (
+                <div className="toast-container">
+                    <div className={`toast-message ${notification.type}`}>
+                        {notification.type === 'error' ? <Info size={20} /> : <Gamepad2 size={20} />}
+                        <span>{notification.message}</span>
+                    </div>
+                </div>
+            )}
 
             {isSettingsOpen && (
                 <div className="modal-overlay" onClick={() => setIsSettingsOpen(false)}>

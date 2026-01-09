@@ -132,6 +132,8 @@ export const WishlistPage = ({ games, wishlistSet, toggleWishlist, addToCart, fo
                                         )}
                                     </div>
 
+                                </div>
+                                <div className="add-to-cart-wrapper">
                                     <button className="add-to-cart-btn" onClick={() => addToCart(game)}>
                                         {t.addToCart}
                                     </button>

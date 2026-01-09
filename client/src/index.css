@@ -39,6 +39,12 @@ header {
   gap: 20px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .search-container {
   flex: 1;
   max-width: 600px;
@@ -74,14 +80,14 @@ header {
   background: var(--eneba-card-bg);
   border-radius: 4px;
   overflow: hidden;
+  /* Svarbu! Kad mygtukas neišlįstų kol nereikia */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  position: relative;
   display: flex;
   flex-direction: column;
+  position: relative;
   height: 100%;
-  /* Užtikrina, kad kortelė užpildytų visą gardelės aukštį */
 }
 
 .game-card:hover {
@@ -90,13 +96,16 @@ header {
   z-index: 10;
 }
 
+/* ... image container lieka toks pat ... */
 .image-container {
   width: 100%;
   aspect-ratio: 3/4;
-  /* Fiksuotas kraštinių santykis, kad nuotraukos būtų vienodo dydžio */
   background: #333;
   position: relative;
   overflow: hidden;
+  /* Čia overflow paliekame, kad nuotrauka neišlįstų */
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
 .image-container img {
@@ -138,32 +147,32 @@ header {
   font-size: 12px;
   font-weight: 700;
   backdrop-filter: blur(2px);
+  z-index: 2;
+  /* Svarbu, kad būtų virš content */
 }
 
+/* Čia svarbiausi content pakeitimai */
 .card-content {
   padding: 15px;
-  position: relative;
-  /* Leidžia mygtukui būti pozicionuotam absoliučiai šio elemento atžvilgiu */
-  transition: transform 0.3s ease;
   background: var(--eneba-card-bg);
   flex: 1;
-  /* Priverčia turinį užpildyti likusią vietą */
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 5;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* Užvedus pelytę tekstas čiuožia į viršų, kad užleistų vietą mygtukui */
 .game-card:hover .card-content {
-  transform: translateY(-40px);
-  /* Pakelia turinį į viršų */
-  /* padding-bottom pašalintas, nes sukeldavo "drebėjimą" */
+  transform: translateY(-46px);
 }
 
 .card-info-top {
   flex: 1;
-  /* Nustumia kainą į apačią */
 }
 
-/* Wishlist mygtukas ant nuotraukos */
+/* Wishlist ir kiti elementai */
 .wishlist-button {
   position: absolute;
   top: 10px;
@@ -181,7 +190,6 @@ header {
   transition: all 0.2s ease;
   z-index: 5;
   opacity: 0;
-  /* Paslėptas kol neužvedi */
   transform: translateY(-5px);
 }
 
@@ -223,7 +231,6 @@ header {
   display: flex;
   flex-direction: column;
   margin-top: auto;
-  /* Kaina visada apačioje */
 }
 
 .old-price-row {
@@ -271,6 +278,7 @@ header {
   margin-top: 10px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .wishlist-count {
@@ -292,64 +300,65 @@ header {
   color: white;
 }
 
-/* Mygtukas dabar yra ABSOLIUČIAI pozicionuotas kortelės APAČIOJE, bet paslėptas */
-.add-to-cart-btn {
+/* --- NAUJAS MYGTUKO SPRENDIMAS (Vidinis slide-up) --- */
+.add-to-cart-wrapper {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+  padding: 10px;
+  background: var(--eneba-card-bg);
+  transform: translateY(100%);
+  /* Paslėptas apačioje */
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 10;
+  /* Jokių borderių ar shadow, kad nesimatytų kol paslėptas */
+}
+
+.game-card:hover .add-to-cart-wrapper {
+  transform: translateY(0);
+  /* Iščiuožia į viršų */
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Panaikinam seną "panaikinti border-radius" stilių, nes čia nebereikia */
+.game-card:hover {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.add-to-cart-btn {
   background: var(--eneba-accent);
   border: none;
-  padding: 12px;
+  padding: 10px;
   font-weight: 800;
   text-transform: uppercase;
   font-size: 13px;
   cursor: pointer;
-  opacity: 0;
-  /* visibility: hidden; Pašalinau visibility, kad animacija būtų sklandesnė */
-  transition: opacity 0.2s ease-in-out;
   color: #111;
   width: 100%;
-  z-index: 20;
-  /* Užtikrina, kad mygtukas būtų viršuje */
+  border-radius: 4px;
 }
 
-.game-card:hover .add-to-cart-btn {
-  opacity: 1;
-  /* visibility: visible; */
-}
-
-
-/* --- UI VALDIKLIAI --- */
-
-.user-controls {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-}
-
+/* LIKĘ STILIAI (modalai, dropdown ir t.t.) */
 .icon-button {
-  background: transparent;
+  background: none;
   border: none;
   color: white;
   cursor: pointer;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
-  /* Pridėjau padding, kad būtų lengviau paspausti */
-  position: relative;
-  /* Svarbu badge pozicionavimui */
+  padding: 5px;
 }
 
-/* SVARBU: Ikonų dydis */
 .icon-button img {
   width: 24px;
   height: 24px;
   display: block;
-  /* Panaikina netyčinius tarpus */
   filter: brightness(0) invert(1);
-  /* Padaro juodas ikonas baltomis */
 }
 
 .lang-selector {
@@ -364,7 +373,6 @@ header {
   color: white;
   font-size: 14px;
   white-space: nowrap;
-  /* Kad tekstas "Lietuvių | EUR" neskiltų */
 }
 
 .flag-icon {
@@ -598,73 +606,58 @@ header {
 }
 
 .cart-header {
-  background: #4f1eb7;
   padding: 15px;
+  background: #3a1078;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .cart-header h3 {
-  margin: 0;
   font-size: 16px;
-  font-weight: 800;
+  margin: 0;
 }
 
 .close-cart {
   background: none;
   border: none;
-  color: white;
   font-size: 24px;
+  color: white;
   cursor: pointer;
   opacity: 0.7;
 }
 
-.empty-cart {
-  padding: 40px;
+.empty-cart-state {
+  padding: 40px 20px;
   text-align: center;
-  background: var(--eneba-purple);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .info-circle {
   width: 60px;
   height: 60px;
-  background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 15px;
-  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 10px;
 }
 
-.empty-cart h4 {
-  margin: 0 0 5px 0;
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.empty-cart p {
-  margin: 0;
-  font-size: 13px;
-  opacity: 0.6;
-}
-
-/* Užpildytas krepšelis */
 .cart-items {
-  max-height: 400px;
+  max-height: 300px;
   overflow-y: auto;
-  background: #3f158a;
 }
 
 .cart-item {
   display: flex;
   padding: 15px;
+  gap: 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.cart-item:last-child {
-  border-bottom: none;
 }
 
 .cart-item-img {
@@ -672,28 +665,25 @@ header {
   height: 80px;
   object-fit: cover;
   border-radius: 4px;
-  margin-right: 15px;
 }
 
 .cart-item-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .cart-item-publisher {
   font-size: 10px;
-  font-weight: 700;
+  color: #999;
   text-transform: uppercase;
-  color: #aeb0b8;
-  margin-bottom: 2px;
+  font-weight: bold;
+  margin-bottom: 4px;
 }
 
 .cart-item-title {
   font-size: 13px;
-  font-weight: 700;
-  line-height: 1.3;
-  margin-bottom: 5px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 8px;
 }
 
 .cart-item-type {
@@ -701,7 +691,7 @@ header {
   align-items: center;
   gap: 5px;
   font-size: 11px;
-  color: #aeb0b8;
+  color: #ccc;
   margin-bottom: 10px;
 }
 
@@ -709,30 +699,30 @@ header {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid #666;
+  color: #666;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 9px;
-  cursor: help;
+  cursor: pointer;
 }
 
 .cart-item-controls {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
-  font-size: 14px;
-  font-weight: 700;
 }
 
 .qty-control {
   cursor: pointer;
-  opacity: 0.6;
-  padding: 0 5px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #999;
 }
 
 .qty-control:hover {
-  opacity: 1;
+  color: white;
 }
 
 .cart-item-price-col {
@@ -745,50 +735,43 @@ header {
 .delete-item {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: #666;
   cursor: pointer;
-  padding: 0;
 }
 
 .delete-item:hover {
-  color: white;
+  color: #ff4444;
 }
 
 .cart-item-price {
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .cart-item-cashback {
   font-size: 10px;
   color: var(--eneba-price-green);
-  font-weight: 600;
 }
 
 .cart-footer {
-  background: var(--eneba-purple);
   padding: 15px;
-  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+  background: #350f6e;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .cart-summary-row {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 13px;
+  color: #ccc;
   margin-bottom: 10px;
-  opacity: 0.8;
 }
 
 .cart-total-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 15px;
-}
-
-.cart-total-row span:first-child {
-  font-size: 20px;
-  font-weight: 800;
+  margin-bottom: 20px;
 }
 
 .total-right {
@@ -796,7 +779,7 @@ header {
 }
 
 .total-price {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 800;
   line-height: 1;
   display: block;
