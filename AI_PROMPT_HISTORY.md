@@ -1,3 +1,5 @@
+AI Utilization Summary: I used AI agents (Copilot/Planner) extensively to accelerate the development process, specifically for scaffolding the React components and generating CSS styles to match the provided design. This allowed me to focus more on architectural decisions (choosing SQLite over Postgres for portability), understanding the implementation of Fuzzy Search with Fuse.js, and debugging local environment issues. The AI acted as a pair programmer, speeding up the boilerplate code while I oversaw the logic, quality assurance, and deployment.
+
 # Chat Conversation
 
 Note: _This is purely the output of the chat conversation and does not contain any raw data, codebase snippets, etc. used to generate the output._
@@ -3299,5 +3301,3 @@ Viską padariau:
     *   **Automatiškai atsidaro vartotojų meniu** viršuje, kad tau nereikėtų ieškoti kur prisijungti.
 
 Tai atrodo daug profesionaliau ir draugiškiau vartotojui. Išbandyk! 🚀
-
-AI Utilization Summary: I used AI agents (Copilot/Planner) extensively to accelerate the development process, specifically for scaffolding the React components and generating CSS styles to match the provided design. This allowed me to focus more on architectural decisions (choosing SQLite over Postgres for portability), understanding the implementation of Fuzzy Search with Fuse.js, and debugging local environment issues. The AI acted as a pair programmer, speeding up the boilerplate code while I oversaw the logic, quality assurance, and deployment.
