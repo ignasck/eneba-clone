@@ -99,7 +99,7 @@ app.post('/wishlist/toggle', (req, res) => {
 
 
 // Handle React routing, return all requests to React app
-app.get('/:splat*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
