@@ -153,6 +153,17 @@ function App() {
         setIsCartOpen(true); // Open cart when added
     };
 
+    const decreaseQuantity = (gameId: number) => {
+        setCart(prev => {
+            const existing = prev.find(item => item.game.id === gameId);
+            if (existing && existing.quantity > 1) {
+                return prev.map(item => item.game.id === gameId ? { ...item, quantity: item.quantity - 1 } : item);
+            }
+            // Jei kiekis 1, pašaliname prekę
+            return prev.filter(item => item.game.id !== gameId);
+        });
+    };
+
     const removeFromCart = (gameId: number) => {
         setCart(prev => prev.filter(item => item.game.id !== gameId));
     };
@@ -335,7 +346,7 @@ function App() {
                                                                 <div className="help-icon">?</div>
                                                             </div>
                                                             <div className="cart-item-controls">
-                                                                <span className="qty-control">-</span>
+                                                                <span className="qty-control" onClick={() => decreaseQuantity(item.game.id)}>-</span>
                                                                 <span className="qty-value">{item.quantity}</span>
                                                                 <span className="qty-control" onClick={() => addToCart(item.game)}>+</span>
                                                             </div>
